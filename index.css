@@ -10,6 +10,11 @@
     background-color: lightgray;
 }
 
+.stuff-row { 
+    display: flex; 
+    justify-content: space-between;
+}
+
 .button-row { 
     display: inline-block;
-  }
+}
