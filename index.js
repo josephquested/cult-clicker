@@ -3,7 +3,7 @@
 function bindEventListers() {
     document.getElementById('faith-button').onclick = generateFaithButtonClicked
     document.getElementById('indoctrinate-button').onclick = indoctrinateFollowerButtonClicked
-    document.getElementById('sacrifice-button').onclick = sacrificeFollowerButtonClicked
+    // document.getElementById('sacrifice-button').onclick = sacrificeFollowerButtonClicked
 }
 
 function devLoad() {
@@ -93,7 +93,8 @@ function createFollower(name, update) {
         id: generateID(),
         name: name,
         update: update,
-        job: 'nothing'
+        job: 'nothing',
+        node: null
     }
 }
 
@@ -103,11 +104,9 @@ function newFollowerUpdate() {
 
 function addFollower() {
     let follower = createFollower(getRandomName(), setInterval(newFollowerUpdate, 1000))
-    print(follower)
     stuff.followers.push(follower)
     createFollowerHTML(follower)
     updateUI('followers', stuff.followers.length)
-    
 }
 
 function removeFollower() {
@@ -121,11 +120,44 @@ function createFollowerHTML(follower) {
 
     node.innerHTML = `
         <p> ${follower.name}</p>
-        <button id="job-nothing-${follower.id}" class="button-selected">no job</button>
+        <span class="button-row">
+            <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
+            <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
+            <button id="job-working-${follower.id}" class="button-unselected button-${follower.id}">working</button>
+        </span>
         <hr>
     `
-
     document.getElementById("followers-div").appendChild(node)
+    follower.node = node
+    
+    let buttons = document.getElementsByClassName(`button-${follower.id}`)
+
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = bindJobSelect    
+    }
+}
+
+function bindJobSelect(e) {
+    let id = e.target.id.split('-')[2]
+    let job = e.target.id.split('-')[1]
+    let follower = stuff.followers.find(fol => fol.id == id)
+    follower.job = job
+    updateFollowerUI(follower, job)
+}
+
+function updateFollowerUI(follower, job) {
+    let buttons = follower.node.querySelectorAll('button')
+
+    for (let i = 0; i < buttons.length; i++) {
+        let button = buttons[i]
+        button.classList.remove('button-selected')
+        button.classList.add('button-unselected')
+        
+        if (button.id.split('-')[2] == follower.id && button.id.split('-')[1] == job) {
+            button.classList.add('button-selected')
+            button.classList.remove('button-unselected')
+        }
+    }
 }
 
 // quantity changes //

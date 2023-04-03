@@ -5,3 +5,11 @@
 .button-selected {
     background-color: lightgreen;
 }
+
+.button-unselected {
+    background-color: lightgray;
+}
+
+.button-row { 
+    display: inline-block;
+  }
