@@ -17,9 +17,10 @@ document.addEventListener("keydown", (e) => {
     }
 })
 
+// screens //
+
 function HideAllScreens() {
     let screens = document.getElementsByClassName('screen')
-    print(screens)
     for (let i = 0; i < screens.length; i++) {
         screens[i].classList.add('hidden')
     }
@@ -51,12 +52,6 @@ let followerFaithGenMultiplier = 1
 
 let indoctrinateCost = 10
 let indoctrinateCostMultiplier = 1.33
-
-// update // 
-
-function newFollowerUpdate() {
-    changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
-}
 
 // on clicks //
 
@@ -94,14 +89,30 @@ function createFollower(name, update) {
     }
 }
 
+function newFollowerUpdate() {
+    changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
+}
+
 function addFollower() {
-    stuff.followers.push(createFollower(getRandomName(), setInterval(newFollowerUpdate, 1000)))
+    let follower = createFollower(getRandomName(), setInterval(newFollowerUpdate, 1000))
+    stuff.followers.push(follower)
+    createFollowerHTML(follower)
     updateUI('followers', stuff.followers.length)
+    
 }
 
 function removeFollower() {
     clearInterval(stuff.followers.pop())
     updateUI('followers', stuff.followers.length)
+}
+
+function createFollowerHTML(follower) {
+    let node = document.createElement("div")
+    let name = document.createElement("p")
+    name.innerHTML = follower.name
+    node.appendChild(name)
+    node.appendChild(document.createElement("hr"))
+    document.getElementById("followers-div").appendChild(node);
 }
 
 // quantity changes //
@@ -110,7 +121,6 @@ function changeThing(thing, change) {
     stuff[thing] += change
     updateUI(thing, stuff[thing])
 }
-
 
 // ui //
 
