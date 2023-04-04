@@ -8,20 +8,24 @@
     <title>CULTY CLICKER</title>
 </head>
 <body>
+    <p class='inline' id="faith">faith: 0</p>
+    <p class='inline' id="cash">cash: 0</p>
+    <p class='inline' id="followers">followers: 0</p>
+
     <div class="screen" id="screen-1">
-        <h1> CULT </h1>
         <h2> cult (1) - followers (2) </h2>
+        <h1> CULT </h1>
         <button id="faith-button">generate faith (+1 faith)</button>
         <button id="indoctrinate-button">indoctrinate follower (-10 faith)</button>
-        <p id="faith">faith: 0</p>
-        <p id="followers">followers: 0</p>
         <!-- <button id="sacrifice-button">sacrifice follower (+10 faith)</button> -->
     </div>
+
     <div class="screen hidden" id="screen-2">
-        <h1> FOLLOWERS </h1>
         <h2> cult (1) - followers (2) </h2>
+        <h1> FOLLOWERS </h1>
         <div id="followers-div"></div>
     </div>
+
     <script src="index.js"></script>
 </body>
 </html>

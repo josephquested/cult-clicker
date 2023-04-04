@@ -45,7 +45,7 @@ function ShowScreen(id) {
 
 let stuff = {
     faith: 0,
-    money: 0,
+    cash: 0,
     followers: []
 }
 
@@ -88,22 +88,26 @@ function sacrificeFollowerButtonClicked() {
 
 // followers // 
 
-function createFollower(name, update) {
+function createFollower(name) {
     return {
         id: generateID(),
         name: name,
-        update: update,
+        update: null,
         job: 'nothing',
         node: null
     }
 }
 
-function newFollowerUpdate() {
-    changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
+function newFollowerUpdate(follower) {
+    if (follower.job == 'praying')
+        changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
+    else if (follower.job == 'working')
+        changeThing('cash', Math.round(1 * followerFaithGenMultiplier))
 }
 
 function addFollower() {
-    let follower = createFollower(getRandomName(), setInterval(newFollowerUpdate, 1000))
+    let follower = createFollower(getRandomName())
+    follower.update = setInterval(() => { newFollowerUpdate(follower) }, 1000)
     stuff.followers.push(follower)
     createFollowerHTML(follower)
     updateUI('followers', stuff.followers.length)

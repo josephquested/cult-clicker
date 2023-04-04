@@ -10,9 +10,9 @@
     background-color: lightgray;
 }
 
-.stuff-row { 
-    display: flex; 
-    justify-content: space-between;
+.inline { 
+    display: inline-block;
+    margin-right: 50px;
 }
 
 .button-row { 
