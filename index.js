@@ -4,11 +4,13 @@ function bindEventListers() {
     document.getElementById('faith-button').onclick = generateFaithButtonClicked
     document.getElementById('indoctrinate-button').onclick = indoctrinateFollowerButtonClicked
     document.getElementById('tent-button').onclick = buildTentButtonClicked
+    document.getElementById('farm-button').onclick = buildFarmButtonClicked
     // document.getElementById('sacrifice-button').onclick = sacrificeFollowerButtonClicked
 }
 
 function devLoad() {
     changeThing('faith', 5000)
+    changeThing('cash', 5000)
 }
 
 window.addEventListener("load", () => {
@@ -48,6 +50,7 @@ let stuff = {
     faith: 0,
     cash: 0,
     housing: 0,
+    farms: 0,
     followers: []
 }
 
@@ -62,6 +65,7 @@ let followerFaithGenMultiplier = 1
 let indoctrinateCost = 10
 let indoctrinateCostMultiplier = 1.33
 let tentCost = 10
+let farmCost = 30
 
 // on clicks //
 
@@ -91,10 +95,19 @@ function sacrificeFollowerButtonClicked() {
 
 function buildTentButtonClicked() {
     if (stuff.cash >= tentCost) {
-        changeThing('cash', -10)
+        changeThing('cash', -tentCost)
         changeThing('housing', 1)
     } else {
         print('not enough cash to build tent')
+    }
+}
+
+function buildFarmButtonClicked() {
+    if (stuff.cash >= farmCost) {
+        changeThing('cash', -farmCost)
+        changeThing('farms', 1)
+    } else {
+        print('not enough cash to build farm')
     }
 }
 
@@ -172,7 +185,7 @@ function bindHousingSelect(e) {
     }
     else 
         makeFollowerHomeless(follower, true)
-        
+
     if (prevStatus != follower.homeless)
         e.target.classList.toggle('red')
     e.target.innerHTML = `${follower.homeless ? 'homeless' : 'has a home'}`
