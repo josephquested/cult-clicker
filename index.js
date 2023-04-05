@@ -3,6 +3,7 @@
 function bindEventListers() {
     document.getElementById('faith-button').onclick = generateFaithButtonClicked
     document.getElementById('indoctrinate-button').onclick = indoctrinateFollowerButtonClicked
+    document.getElementById('tent-button').onclick = buildTentButtonClicked
     // document.getElementById('sacrifice-button').onclick = sacrificeFollowerButtonClicked
 }
 
@@ -18,7 +19,7 @@ window.addEventListener("load", () => {
 // inputs // 
 
 document.addEventListener("keydown", (e) => {
-    if (e.key == '1' || e.key == '2') {
+    if (e.key == '1' || e.key == '2' || e.key == '3') {
         HideAllScreens()
         ShowScreen(e.key)
     }
@@ -46,6 +47,7 @@ function ShowScreen(id) {
 let stuff = {
     faith: 0,
     cash: 0,
+    housing: 0,
     followers: []
 }
 
@@ -59,6 +61,7 @@ let followerFaithGenMultiplier = 1
 
 let indoctrinateCost = 10
 let indoctrinateCostMultiplier = 1.33
+let tentCost = 10
 
 // on clicks //
 
@@ -83,6 +86,15 @@ function sacrificeFollowerButtonClicked() {
         removeFollower()
     } else {
         print('no followers to sacrifice')
+    }
+}
+
+function buildTentButtonClicked() {
+    if (stuff.cash >= tentCost) {
+        changeThing('cash', -10)
+        changeThing('housing', 1)
+    } else {
+        print('not enough cash to build tent')
     }
 }
 
@@ -187,6 +199,7 @@ function updateButtonUI(name, str) {
 
 function print(str) {
     console.log(str)
+    document.getElementById("message").innerHTML = str
 }
 
 // utility //

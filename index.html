@@ -11,9 +11,12 @@
     <p class='inline' id="faith">faith: 0</p>
     <p class='inline' id="cash">cash: 0</p>
     <p class='inline' id="followers">followers: 0</p>
+    <p class='inline' id="housing">housing: 0</p>
+
+    <h2 id="message"></h2>
 
     <div class="screen" id="screen-1">
-        <h2> cult (1) - followers (2) </h2>
+        <h2> <strong>cult (1)</strong> / followers (2) / building (3)</h2>
         <h1> CULT </h1>
         <hr>
         <button id="faith-button">generate faith (+1 faith)</button>
@@ -22,11 +25,19 @@
     </div>
     
     <div class="screen hidden" id="screen-2">
-        <h2> cult (1) - followers (2) </h2>
+        <h2> cult (1) / <strong>followers (2)</strong> / building (3)</h2>
         <h1> FOLLOWERS </h1>
         <hr>
         <div id="followers-div"></div>
     </div>
+    
+    <div class="screen hidden" id="screen-3">
+        <h2> cult (1) / followers (2) / <strong>build (3)</strong></h2>
+        <h1> BUILD </h1>
+        <hr>
+        <button id="tent-button">build tent (-10 cash, +1 housing)</button>
+    </div>
+    
 
     <script src="index.js"></script>
 </body>
