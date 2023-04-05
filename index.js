@@ -126,8 +126,8 @@ function createFollowerHTML(follower) {
 
     node.innerHTML = `
         <h3> ${follower.name}</h3>
-        <p class='inline'> ${follower.homeless ? 'homeless' : 'has a home'} </p>
-        <p class='inline'> ${follower.hungry ? 'hungry' : 'well fed'} </p>
+        <p class='inline ${follower.homeless ? 'red' : ''}'> ${follower.homeless ? 'homeless' : 'has a home'} </p>
+        <p class='inline ${follower.hungry ? 'red' : ''}'> ${follower.hungry ? 'hungry' : 'well fed'} </p>
         <span class="button-row">
             <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
             <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
