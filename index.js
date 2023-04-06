@@ -51,6 +51,8 @@ let stuff = {
     cash: 0,
     housing: 0,
     farms: 0,
+    farmers: 0,
+    food: 0,
     followers: []
 }
 
@@ -59,6 +61,7 @@ let stuff = {
 let faithGainedOnClick = 1
 let followersGainedOnClick = 1
 let followerFaithGenMultiplier = 1
+let followerFoodGenMultiplier = 1
 
 // costs //
 
@@ -130,6 +133,8 @@ function newFollowerUpdate(follower) {
         changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
     else if (follower.job == 'working')
         changeThing('cash', Math.round(1 * followerFaithGenMultiplier))
+    else if (follower.job == 'farming')
+        changeThing('food', Math.round(1 * followerFoodGenMultiplier))
 }
 
 function addFollower() {
@@ -157,6 +162,7 @@ function createFollowerHTML(follower) {
             <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
             <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
             <button id="job-working-${follower.id}" class="button-unselected button-${follower.id}">working</button>
+            <button id="job-farming-${follower.id}" class="button-unselected button-${follower.id}">farming</button>
         </span>
         <hr>
     `
@@ -172,6 +178,8 @@ function createFollowerHTML(follower) {
         buttons[i].onclick = bindJobSelect
     }
 }
+
+// follower housing stuff //
 
 function bindHousingSelect(e) {
     let follower = getFollowerFromEvt(e)
@@ -189,14 +197,36 @@ function bindHousingSelect(e) {
     if (prevStatus != follower.homeless)
         e.target.classList.toggle('red')
     e.target.innerHTML = `${follower.homeless ? 'homeless' : 'has a home'}`
-    
 }
+
+function makeFollowerHomeless(follower, isBecomingHomeless) {
+    follower.homeless = isBecomingHomeless
+    if (isBecomingHomeless)
+        changeThing('housing', 1)
+    else 
+        changeThing('housing', -1)
+}
+
+// farming stuff //
+
+function countFarmers() {
+    return stuff.followers.filter((follower => follower.job == "farming")).length
+}
+
+// job stuff //
 
 function bindJobSelect(e) {
     let follower = getFollowerFromEvt(e)
     let job = e.target.id.split('-')[1]
-    follower.job = job
-    updateFollowerUI(follower, job)
+
+    if (job == "farming" && stuff.farms <= 0) 
+        print("you need to build a farm")
+    else if (job == "farming" && stuff.farms <= countFarmers()) 
+        print("all the farms are already being farmed")
+    else {
+        follower.job = job
+        updateFollowerUI(follower, job)
+    }
 }
 
 function updateFollowerUI(follower, job) {
@@ -214,13 +244,6 @@ function updateFollowerUI(follower, job) {
     }
 }
 
-function makeFollowerHomeless(follower, isBecomingHomeless) {
-    follower.homeless = isBecomingHomeless
-    if (isBecomingHomeless)
-        changeThing('housing', 1)
-    else 
-        changeThing('housing', -1)
-}
 
 // quantity changes //
 
