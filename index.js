@@ -51,7 +51,6 @@ let stuff = {
     cash: 0,
     housing: 0,
     farms: 0,
-    farmers: 0,
     food: 0,
     followers: []
 }
@@ -120,15 +119,17 @@ function createFollower(name) {
     return {
         id: generateID(),
         name: name,
-        update: null,
+        update1Second: null,
+        update5Second: null,
         job: 'nothing',
         node: null,
         homeless: true,
-        hungry: true
+        hungry: true, 
+        happiness: 10
     }
 }
 
-function newFollowerUpdate(follower) {
+function followerUpdate1Second(follower) {
     if (follower.job == 'praying')
         changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
     else if (follower.job == 'working')
@@ -137,9 +138,39 @@ function newFollowerUpdate(follower) {
         changeThing('food', Math.round(1 * followerFoodGenMultiplier))
 }
 
+function followerUpdate5Second(follower) {
+    let hungryP = document.getElementById(`hungry-${follower.id}`)
+
+    if (stuff.food > 0) {
+        changeThing('food', -1)
+        follower.hungry = false;
+        hungryP.classList.remove('red')
+        changeFollowerHappiness(follower, 1)
+    } else {
+        follower.hungry = false;
+        hungryP.classList.add('red')
+        changeFollowerHappiness(follower, -1)
+    }
+
+    hungryP.innerHTML = follower.hungry ? 'hungry' : 'well fed'
+}
+
+// NEEDS UI TO SHOW HAPPINESS AND METHOD TO UPDATE IT EASILY
+function changeFollowerHappiness(follower, change) {
+    if (change > 0 && follower.happiness < 10) {
+        follower.happiness += change
+    } else {
+        if (follower.happiness == 1) {
+            follower.happiness += change
+            print(follower.name + " has turned against you")
+        }
+    }
+}
+
 function addFollower() {
     let follower = createFollower(getRandomName())
-    follower.update = setInterval(() => { newFollowerUpdate(follower) }, 1000)
+    follower.update1Second = setInterval(() => { followerUpdate1Second(follower) }, 1000)
+    follower.update5Second = setInterval(() => { followerUpdate5Second(follower) }, 5000)
     stuff.followers.push(follower)
     createFollowerHTML(follower)
     updateUI('followers', stuff.followers.length)
@@ -157,7 +188,8 @@ function createFollowerHTML(follower) {
     node.innerHTML = `
         <h3> ${follower.name}</h3>
         <button id="housing-button-${follower.id}" class='inline ${follower.homeless ? 'red' : ''}'> ${follower.homeless ? 'homeless' : 'has a home'} </button>
-        <button class='inline ${follower.hungry ? 'red' : ''}'> ${follower.hungry ? 'hungry' : 'well fed'} </button>
+        <p id="hungry-${follower.id}" class='inline ${follower.hungry ? 'red' : ''}'> ${follower.hungry ? 'hungry' : 'well fed'} </p>
+        <p id="happiness-${follower.id}" class='inline'>${follower.happiness}</p>
         <span class="button-row">
             <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
             <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
