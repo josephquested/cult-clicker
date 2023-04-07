@@ -22,12 +22,15 @@ window.addEventListener("load", () => {
 
 document.addEventListener("keydown", (e) => {
     if (e.key == '1' || e.key == '2' || e.key == '3') {
-        HideAllScreens()
         ShowScreen(e.key)
     }
 })
 
 // screens //
+
+document.getElementById("1-cult-nav").onclick = ShowScreen
+document.getElementById("2-followers-nav").onclick = ShowScreen
+document.getElementById("3-build-nav").onclick = ShowScreen
 
 function HideAllScreens() {
     let screens = document.getElementsByClassName('screen')
@@ -37,6 +40,11 @@ function HideAllScreens() {
 }
     
 function ShowScreen(id) {
+    HideAllScreens()
+
+    if (id.target != null)
+        id = id.target.id[0]
+
     let screens = document.getElementsByClassName('screen')
     for (let i = 0; i < screens.length; i++) {
         if (screens[i].id == 'screen-' + id)
@@ -140,6 +148,9 @@ function followerUpdate1Second(follower) {
 
 function followerUpdate5Second(follower) {
     let hungryP = document.getElementById(`hungry-${follower.id}`)
+
+    if (follower.homeless)
+        changeFollowerHappiness(follower, -1)
 
     if (stuff.food > 0) {
         changeThing('food', -1)
