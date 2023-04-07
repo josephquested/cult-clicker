@@ -60,6 +60,7 @@ let stuff = {
     housing: 0,
     farms: 0,
     food: 0,
+    doubters: 0,
     followers: []
 }
 
@@ -133,12 +134,15 @@ function createFollower(name) {
         node: null,
         homeless: true,
         hungry: true, 
-        happiness: 10
+        happiness: 10,
+        doubter: false
     }
 }
 
 function followerUpdate1Second(follower) {
-    if (follower.job == 'praying')
+    if (follower.doubter)
+        changeThing('faith', -1)
+    else if (follower.job == 'praying')
         changeThing('faith', Math.round(1 * followerFaithGenMultiplier))
     else if (follower.job == 'working')
         changeThing('cash', Math.round(1 * followerFaithGenMultiplier))
@@ -166,18 +170,31 @@ function followerUpdate5Second(follower) {
     hungryP.innerHTML = follower.hungry ? 'hungry' : 'well fed'
 }
 
-// NEEDS UI TO SHOW HAPPINESS AND METHOD TO UPDATE IT EASILY
 function changeFollowerHappiness(follower, change) {
-    follower.happiness += change
+    if (!follower.doubter) {
+        follower.happiness += change
+        let happinessP = document.getElementById(`happiness-${follower.id}`)
 
-    if (follower.happiness > 10) {
-        follower.happiness = 10
-    } else {
-        if (follower.happiness == 0) 
-            print(follower.name + " has turned against you")
+        if (follower.happiness > 10) {
+            follower.happiness = 10
+        } else {
+            if (follower.happiness == 0) 
+                becomeDoubter(follower)
+        }
+    
+        if (!follower.doubter)
+            happinessP.innerHTML = `happiness: ${follower.happiness}`
     }
+}
 
-    document.getElementById(`happiness-${follower.id}`).innerHTML = `happiness: ${follower.happiness}`
+function becomeDoubter(follower) {
+    changeThing('doubters', 1)
+    follower.doubter = true
+    let happinessP = document.getElementById(`happiness-${follower.id}`)
+    document.getElementById(`job-buttons-${follower.id}`).style.display = 'none'
+    happinessP.innerHTML = `DOUBTER: -1 faith`
+    happinessP.classList.add('red')
+    print(follower.name + " has turned against you")
 }
 
 function addFollower() {
@@ -203,7 +220,7 @@ function createFollowerHTML(follower) {
         <p id="happiness-${follower.id}">happiness: ${follower.happiness}</p>
         <button id="housing-button-${follower.id}" class='inline ${follower.homeless ? 'red' : ''}'> ${follower.homeless ? 'homeless' : 'has a home'} </button>
         <p id="hungry-${follower.id}" class='inline ${follower.hungry ? 'red' : ''}'> ${follower.hungry ? 'hungry' : 'well fed'} </p>
-        <span class="button-row">
+        <span id="job-buttons-${follower.id}" class="button-row">
             <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
             <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
             <button id="job-working-${follower.id}" class="button-unselected button-${follower.id}">working</button>
@@ -222,6 +239,12 @@ function createFollowerHTML(follower) {
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].onclick = bindJobSelect
     }
+}
+
+// doubters 
+
+function countDoubters () {
+    return stuff.followers.filter(follower => follower.doubter)
 }
 
 // follower housing stuff //
