@@ -166,7 +166,7 @@ function changeFollowerHappiness(follower, change) {
             print(follower.name + " has turned against you")
     }
 
-    document.getElementById(`happiness-${follower.id}`).innerHTML = follower.happiness
+    document.getElementById(`happiness-${follower.id}`).innerHTML = `happiness: ${follower.happiness}`
 }
 
 function addFollower() {
@@ -189,9 +189,9 @@ function createFollowerHTML(follower) {
 
     node.innerHTML = `
         <h3> ${follower.name}</h3>
+        <p id="happiness-${follower.id}">happiness: ${follower.happiness}</p>
         <button id="housing-button-${follower.id}" class='inline ${follower.homeless ? 'red' : ''}'> ${follower.homeless ? 'homeless' : 'has a home'} </button>
         <p id="hungry-${follower.id}" class='inline ${follower.hungry ? 'red' : ''}'> ${follower.hungry ? 'hungry' : 'well fed'} </p>
-        <p id="happiness-${follower.id}" class='inline'>${follower.happiness}</p>
         <span class="button-row">
             <button id="job-nothing-${follower.id}" class="button-selected button-${follower.id}">no job</button>
             <button id="job-praying-${follower.id}" class="button-unselected button-${follower.id}">praying</button>
