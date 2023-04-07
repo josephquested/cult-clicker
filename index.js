@@ -147,7 +147,7 @@ function followerUpdate5Second(follower) {
         hungryP.classList.remove('red')
         changeFollowerHappiness(follower, 1)
     } else {
-        follower.hungry = false;
+        follower.hungry = true;
         hungryP.classList.add('red')
         changeFollowerHappiness(follower, -1)
     }
@@ -157,14 +157,16 @@ function followerUpdate5Second(follower) {
 
 // NEEDS UI TO SHOW HAPPINESS AND METHOD TO UPDATE IT EASILY
 function changeFollowerHappiness(follower, change) {
-    if (change > 0 && follower.happiness < 10) {
-        follower.happiness += change
+    follower.happiness += change
+
+    if (follower.happiness > 10) {
+        follower.happiness = 10
     } else {
-        if (follower.happiness == 1) {
-            follower.happiness += change
+        if (follower.happiness == 0) 
             print(follower.name + " has turned against you")
-        }
     }
+
+    document.getElementById(`happiness-${follower.id}`).innerHTML = follower.happiness
 }
 
 function addFollower() {
