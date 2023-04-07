@@ -9,8 +9,8 @@ function bindEventListers() {
 }
 
 function devLoad() {
-    changeThing('faith', 50)
-    changeThing('cash', 5000)
+    changeThing('faith', 10)
+    // changeThing('cash', 5000)
 }
 
 window.addEventListener("load", () => {
@@ -38,12 +38,16 @@ function HideAllScreens() {
         screens[i].classList.add('hidden')
     }
 }
+
+let screenNames = ['CULT', 'FOLLOWERS', 'BUILD']
     
 function ShowScreen(id) {
     HideAllScreens()
 
     if (id.target != null)
         id = id.target.id[0]
+
+    document.getElementById('title').innerHTML = screenNames[id - 1]
 
     let screens = document.getElementsByClassName('screen')
     for (let i = 0; i < screens.length; i++) {
