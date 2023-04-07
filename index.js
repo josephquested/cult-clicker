@@ -9,7 +9,7 @@ function bindEventListers() {
 }
 
 function devLoad() {
-    changeThing('faith', 5000)
+    changeThing('faith', 50)
     changeThing('cash', 5000)
 }
 
@@ -318,6 +318,17 @@ function updateFollowerUI(follower, job) {
 function changeThing(thing, change) {
     stuff[thing] += change
     updateUI(thing, stuff[thing])
+
+    if (stuff.faith <= 0)
+        gameOver()
+}
+
+// game over //
+
+function gameOver() {
+    document.getElementById("game-container").classList.add('hidden')
+    document.getElementById("gameover-container").classList.remove('hidden')
+    print("GAME OVER!")
 }
 
 // ui //
